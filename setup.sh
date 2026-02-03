@@ -176,7 +176,7 @@ parse_arguments() {
 
     # Generate random CA name if not specified
     if [[ -z "$CA_NAME" ]]; then
-        CA_NAME="$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 32)-CA"
+        CA_NAME="$(head -c 256 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)-CA"
     fi
 }
 
@@ -748,6 +748,7 @@ install_wgcf() {
 
     info "Downloading from: $wgcf_url"
     curl -L -o "$wgcf_bin" "$wgcf_url"
+    sync  # Ensure file is fully written to disk before execution
     chmod +x "$wgcf_bin"
 
     if ! "$wgcf_bin" --version 2>/dev/null; then
