@@ -591,7 +591,8 @@ AUTHEOF
     chmod 755 "${SERVER_DIR}/auth-verify.sh"
     mkdir -p "$LOG_DIR"
     touch "${LOG_DIR}/auth.log"
-    chmod 640 "${LOG_DIR}/auth.log"
+    chown nobody:"${OVPN_GROUP}" "${LOG_DIR}/auth.log"
+    chmod 660 "${LOG_DIR}/auth.log"
     ok "Authentication system ready"
 }
 
@@ -610,7 +611,7 @@ create_server_configs() {
 
     mkdir -p "$LOG_DIR"
 
-    cat > "${SERVER_DIR}/security.conf" <<'EOF'
+    cat > "${SERVER_DIR}/security.conf" <<EOF
 dh none
 ecdh-curve secp384r1
 
